@@ -9,6 +9,5 @@ dir.create(path = file.path("graphs"), showWarnings = FALSE)
 #How to use in your local computer...
 #whenever starting in r or positron, run this code:
 
-#get setup
-source("-setup.r")
+#source("-setup.r") 
 
