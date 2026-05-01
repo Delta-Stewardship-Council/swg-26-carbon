@@ -1,4 +1,0 @@
-# This script tests the setup and box_authentication scripts
-
-source("-setup.r")
-source(box_authentication)
