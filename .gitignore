@@ -51,4 +51,5 @@ po/*~
 rsconnect/
 
 #folders to ignore
-data/
+data/ 
+#have to delete this if want to be able to upload data to github directly 
