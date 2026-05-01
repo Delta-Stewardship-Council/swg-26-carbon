@@ -1,0 +1,36 @@
+---
+title: "Statewide Crop Mapping GIS Geodatabase"
+format: html
+author: Diana Zapata
+---
+
+## Setup
+```{r}
+source("scripts/-setup.r") # this sources functions within the setup script to make sure we all have the same folder structure
+source("scripts/box_authentication.R") # this will authenticate your Box connection to be able to access data. info on specific Box folder IDs is also in this script for your reference
+
+```
+
+### Download data
+```{r}
+crops_dir <- here::here('data/crops_delta')
+
+file_name <- "california_crops.zip"
+
+if(!dir.exists(crops_dir)) {
+    crops_url <- "https://data.cnra.ca.gov/dataset/6c3d65e3-35bb-49e1-a51e-49d5a2cf09a9/resource/157956a5-507e-4c6c-b161-b21361488576/download/i15_crop_mapping_2024_provisional_20251208.gdb.zip"
+
+    options(timeout = max(300, getOption("timeout")))
+    download.file(url = crops_url,
+        destfile = file_name,
+        mode = 'wb')
+
+    unzip(file_name, exdir = crops_dir)
+
+    file.remove(file_name)
+}
+```
+
+
+
+

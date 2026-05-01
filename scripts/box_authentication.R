@@ -14,7 +14,7 @@ library(boxr)
 
 ## Step 2.1: Now add in your unique Box authentication IDs to the .Renviron file
 ## Note: each our unique authentication IDs can be stored in the .Renviron file  so you don't have look it up each time
-usethis::edit_r_environ()
+# usethis::edit_r_environ()
 
 ## Step 2.2: Try to authenticate box!
 box_auth()
