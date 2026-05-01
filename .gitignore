@@ -39,8 +39,3 @@ rsconnect/
 #folders to ignore
 data/ 
 #have to delete this if want to be able to upload data to github directly 
-<<<<<<< HEAD
-/Users/tpozzi/.boxr-oauth
-=======
-C:/Users/mpagliar/.boxr-oauth
->>>>>>> c70c1ff60bff96a314d0d9ab71836b0d9bb9423d
