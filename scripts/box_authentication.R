@@ -29,15 +29,12 @@ box_auth()
 ### Using `BOX_CLIENT_SECRET` from environment
 ### boxr: Authenticated using OAuth2 as < FIRST LAST > (email, id: ##########)
 
-# Step 4: Download data from Box
+## Here are the IDs for our specific Box folders: 
+## You can use box_ls() to figure out the IDs for specific files within a folder
+## Example: box_ls("379716945014") will show you all the files in the "raw" data folder
+# Zero Flux: 375386594086
+# Data: 375552738580
+# raw: 379716945014
+# clean: 379716878316
 
-## Function to list folders in your Box drive
-box_ls()
-
-# Search for the base project folder, and return it as a data frame
-response <- box_search_folders("2026_DELTA_SYNTHESIS_WORKGROUP")
-base_folder <- as.data.frame(response)[c("name", "type", "size", "id")]
-
-# Using the base folder id, list the contents of that folder
-as.data.frame(response)[c("name", "type", "size", "id")]
 

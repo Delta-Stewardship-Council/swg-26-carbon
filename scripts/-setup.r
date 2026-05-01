@@ -1,7 +1,7 @@
 #make folders
 dir.create(path = file.path("data"), showWarnings = FALSE)
 dir.create(path = file.path("sandbox"), showWarnings = FALSE)
-dir.create(path = file.path("script"), showWarnings = FALSE)
+dir.create(path = file.path("scripts"), showWarnings = FALSE)
 dir.create(path = file.path("tools"), showWarnings = FALSE)
 dir.create(path = file.path("graphs"), showWarnings = FALSE)
 
