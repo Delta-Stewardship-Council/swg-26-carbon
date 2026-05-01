@@ -8,3 +8,6 @@ source("-setup.r")
 #https://nceas-learning-hub.github.io/2026_delta_week1/s06_lecture_data_mgmt_discovery.html#bonus-load-data-from-box-into-r
 library(boxr)
 box_auth()
+
+#how to call box data
+box_ls("375386594086")
