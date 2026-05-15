@@ -1,4 +1,4 @@
-# Carbon Synthesis Wokring Group
+# Carbon Synthesis Working Group
 
 ## Purpose
 
