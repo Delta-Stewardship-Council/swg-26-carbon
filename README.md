@@ -18,7 +18,7 @@ Principal Investigators:
 
 There are five main folders: data, sandbox, scripts, tools, and graphs.
 
-*Data folder is private and only visible by our team. We keep most of our data in a Box folder. This folder contains data that has been saved onto local versions of this repo.
+*Data folder* is private and only visible by our team. We keep most of our data in a Box folder, where there are two data folders: raw for the original datasetes and clean for the wrangled datasets. 
 
 *Sandbox folder* contains extra scripts, tools, graphs, etc. that we made at some point, would like to keep, but not house within the main scripts, tools, and graphs folers. 
 
