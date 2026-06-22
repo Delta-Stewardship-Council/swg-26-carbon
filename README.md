@@ -19,10 +19,9 @@ Principal Investigators:
 There are five main folders: data, sandbox, scripts, tools, and graphs.
 
 *Data folder* is private and only visible by our team. We keep most of our data in a Box folder, where there are two data folders: raw for the original datasetes and clean for the wrangled datasets. Each subfolder under the raw, misc, or processed data will contain the name of the datasource. If the name is an acronym, then the description of the subfolder will contain the whole name.
-**Raw** This folder contains all unprocessed data files.
-***LSPT*** This folder contains all files sourced from the Landscape Scenario Planning Tool.
-**Processed** This folder contains data that has been cleaned.
-**Misc** This folder contains miscellaneous data.
+-Raw: This folder contains all unprocessed data files. LSPT: This folder contains all files sourced from the Landscape Scenario Planning Tool.
+-Processed: This folder contains data that has been cleaned.
+-Misc: This folder contains miscellaneous data.
 
 *Sandbox folder* contains extra scripts, tools, graphs, etc. that we made at some point, would like to keep, but not house within the main scripts, tools, and graphs folers. 
 
