@@ -1,0 +1,39 @@
+---
+title: "Read Hydrofocus Maps"
+format: html
+author: Diana Zapata
+---
+
+## Setup
+```{r}
+source("tools/-setup.r") # This sources functions within the setup script to make sure we all have the same folder structure
+source("tools/box_authentication.R") # This will authenticate your Box connection to be able to access data. info on specific Box folder IDs is also in this script for your reference
+```
+
+### Download packages
+
+```{r}
+    install.packages(c("boxr", "sf"))
+    library(boxr)
+    library(sf)
+```
+
+### Download data
+```{r}
+# Define a temporary directory to unpack your files cleanly
+deverel_dir <- tempdir()
+
+# Provide the Box file ID and specify the local path/name it should save as
+box_dl(
+  file_id = 392886560802, 
+  local_dir = deverel_dir, 
+  overwrite = TRUE
+)
+
+# Unzip the file programmatically
+unzip(file.path(deverel_dir, "Hydrofocus_maps.zip"), exdir = deverel_dir)
+```
+
+```{r}
+box_search_files("392886560802")
+```
