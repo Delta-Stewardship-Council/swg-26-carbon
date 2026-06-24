@@ -1,58 +1,133 @@
-### Script for reading Hydrofocus maps from Box
+###################################################
+### Script for reading Hydrofocus maps from Box ###
+###################################################
 
-### Setup
-source("tools/-setup.r") # This sources functions within the setup script to make sure we all have the same folder structure
-source("tools/box_authentication.R") # This will authenticate your Box connection to be able to access data. info on specific Box folder IDs is also in this script for your reference
+### ==========================================
+### 1) Setup & Package Management
+### ==========================================
+source("tools/-setup.r")           # Establishes shared folder structures
+source("tools/box_authentication.R") # Authenticates Box connection
 
-### Download packages
-install.packages(c("boxr", "sf", "terra"))
+# Function to safely install missing packages without re-installing existing ones
+required_packages <- c("boxr", "sf", "terra", "readr", "dplyr", "tidyr", 
+                       "here", "vctrs", "ggplot2", "leaflet", "ggspatial", "prettymapr")
+
+missing_packages <- required_packages[!(required_packages %in% installed.packages()[, "Package"])]
+if(length(missing_packages) > 0) {
+    install.packages(missing_packages)
+}
+
+# Load libraries
 library(boxr)
 library(sf)
 library(terra)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(here)
+library(ggplot2)
+library(ggspatial)
 
-### Datra folder codes
-# box_ls("375552738580") # Data folder
-# box_ls("379716945014") # rawdata
-# box_ls("392886560802") # Hydrofocus
+### ==========================================
+### A. Raster - Download & Read Files
+### ==========================================
 
-### Download data
-# 1. Define your Box folder ID
-deverel_box_folder <- "392886560802"
+# Define Box folder ID & local directory
+dev_folder_id <- "392886560802"
+dev_dir <- here::here('data/delta_hydrofocus')
 
-# 2. Create a local temporary directory to store the spatial files
-local_dir <- tempdir()
+# Handle folder creation safely
+if(!dir.exists(dev_dir)) {
+    dir.create(dev_dir, recursive = TRUE)
+}
 
-# 3. Download the entire folder contents from Box
-box_fetch(
-    dir_id = deverel_box_folder, 
-    local_dir = local_dir, 
-    overwrite = TRUE
-)
+# List all items inside the Box folder
+box_contents <- as.data.frame(box_ls(dev_folder_id))
 
-### Read the raster files
-# 1. Find the raster file name in your temporary directory
-# This looks for any file ending in .tif or .tiff
-raster_file <- list.files(local_dir, pattern = "\\.tiff?$", full.names = TRUE)
+# Filter for files ending in .tif or .tiff (case-insensitive)
+tif_files <- box_contents %>% 
+  filter(type == "file" & grepl("\\.tiff?$", name, ignore.case = TRUE))
 
-# Print it to make sure R found it
-print(raster_file)
+print(paste("Found", nrow(tif_files), ".tif files to download."))
 
-# Get to know each raster structure
-raster_list[1] # Delta_Wide_flux_Year1_tCO2e_ac_v04152025
-raster_list[2] # DTW_delta_wide_meters_05302025
-raster_list[3] # org_soil_thickness_2017_meters_org_ext_05302025
+# Loop through and download ONLY the .tif files
+if (nrow(tif_files) > 0) {
+    for (i in 1:nrow(tif_files)) {
+        box_dl(
+            file_id = tif_files$id[i],
+            local_dir = dev_dir,
+            overwrite = TRUE
+        )
+    }
+} else {
+    stop("No .tif files were found in the specified Box folder.")
+}
 
-my_stack <- rast(raster_file)
+# Identify and load the locally downloaded files
+raster_files <- list.files(dev_dir, pattern = "\\.tiff?$", full.names = TRUE, ignore.case = TRUE)
+raster_list <- lapply(raster_files, rast)
+
+print(paste("Successfully loaded", length(raster_list), "raster layers into R."))
+
+# Look into the raster layers details and ensure they are loaded correctly
+raster_list[1] # delta_fluxes_tCO2e_ac
+raster_list[2] # depth_to_water_table_m
+raster_list[3] # organic_soil_tickness
+
+# Plots: Loop through the list and plot each raster individually
+for (i in seq_along(raster_list)) {
+    
+    # Extract just the file name from the full path to use as a title
+    file_title <- basename(raster_files[i])
+    
+    # Plot the spatRaster object
+    plot(raster_list[[i]], main = file_title)
+}
 
 
-# Load them as a collection list instead of a single stack
-raster_list <- lapply(raster_file, rast)
-
-# If they are adjacent tiles, you can merge them into one giant map:
-my_mosaic <- do.call(mosaic, raster_list)
-plot(my_mosaic)
 
 
 
 
+### ==========================================
+### B. Shapefile - Download & Read Files
+### ==========================================
+out_dir <- here::here('data/soils_delta')
 
+# Check if directory exists; if not, create it and pull data
+if(!dir.exists(out_dir)) {
+    dir.create(out_dir, recursive = TRUE)
+    
+    box_folder_id <- "392994519065" 
+    box_fetch(
+        dir_id = box_folder_id, 
+        local_dir = out_dir,
+        overwrite = TRUE
+    )
+}
+
+### ==========================================
+### 3. Spatial Analysis & Visualization
+### ==========================================
+
+# Read the shapefile
+delta_soils_sf <- read_sf(here::here('data/soils_delta/delta_soils_20210714_3717_v4.shp'))
+
+# Verify Coordinate Reference System (CRS)
+print(st_crs(delta_soils_sf))
+
+# Plot soil organic matter (fom2)
+ggplot(data = delta_soils_sf) +
+  geom_sf(aes(fill = fom2)) +
+  scale_fill_viridis_c(option = "plasma") + 
+  theme_minimal() +
+  labs(
+    title = "Soil Organic Matter in the Delta (SSURGO)", 
+    fill = "Percentage",
+    caption = paste("CRS:", st_crs(delta_soils_sf)$epsg)
+  )
+
+
+### ==========================================
+### 2) Combining files for analysis
+### ==========================================
