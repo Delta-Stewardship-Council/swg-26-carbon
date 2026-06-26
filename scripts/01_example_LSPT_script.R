@@ -1,7 +1,3 @@
-library(boxr)
-library(terra)
-library(sf)
-
 source("tools/-setup.r") #Setup Script
 source("tools/box_authentication.R")
 
