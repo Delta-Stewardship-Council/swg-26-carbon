@@ -5,6 +5,13 @@ library(sf)
 source("tools/-setup.r") #Setup Script
 source("tools/box_authentication.R")
 
+library(terra) #package for handling rasters
+#install.packages("tidyterra") install this package if needed
+library(dplyr)
+#library(tidyterra) #package for plotting rasters
+library(ggplot2)
+
+
 box_ls('392885596000') #Checking out the contents of the Landscape Scenario Planning Tool
 box_fetch(
   dir_id = '392885596000', #putting in tiff file id
@@ -14,7 +21,7 @@ box_fetch(
   delete = FALSE
 )
 #Downloading All Files in the LSPT Folder
-### Read the raster files
+### Read the raster files using rast function once the list pieces are parsed out.
 # This looks for any file ending in .tif or .tiff
 raster_file <- list.files(path= 'data', pattern = "\\.tiff?$", full.names = TRUE)
 print(raster_file)

@@ -98,7 +98,7 @@ out_dir <- here::here('data/soils_delta')
 if(!dir.exists(out_dir)) {
     dir.create(out_dir, recursive = TRUE)
     
-    box_folder_id <- "392994519065" 
+    box_folder_id <- "392994519065" #392894519065 worked for me
     box_fetch(
         dir_id = box_folder_id, 
         local_dir = out_dir,
